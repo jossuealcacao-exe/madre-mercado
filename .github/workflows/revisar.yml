@@ -1,0 +1,38 @@
+# Revisa cada módulo que llega en un pull request: lo carga como MADRE carga uno antes de instalarlo,
+# revisa su entrada y escribe en el resumen del job lo que declara y lo que su código usa.
+# Corre con permisos de solo lectura y sin secretos: el código de un PR de otra persona nunca ve
+# una llave. Firmar y publicar lo hace después, a mano, el autor de MADRE.
+name: Revisar módulo
+on:
+  pull_request:
+    paths: ['modulos/**']
+permissions:
+  contents: read
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Revisar los módulos que cambian
+        run: |
+          git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- modulos/ | cut -d/ -f2 | sort -u | grep -v '^\.' > cambiados.txt || true
+          status=0
+          while read -r id; do
+            [ -z "$id" ] && continue
+            file="modulos/$id/$id.module.mjs"
+            entry="modulos/$id/entrada.json"
+            if [ ! -f "$file" ] || [ ! -f "$entry" ]; then
+              echo "## ❌ $id: hacen falta $file y $entry" >> "$GITHUB_STEP_SUMMARY"
+              status=1
+              continue
+            fi
+            # La revisión vive en MADRE (src/market-check.mjs), la misma que corre al enviar un módulo.
+            npx --yes madre@latest check-module --file "$file" --entry "$entry" >> "$GITHUB_STEP_SUMMARY" || status=1
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          done < cambiados.txt
+          exit $status
