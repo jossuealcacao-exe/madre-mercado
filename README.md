@@ -36,7 +36,7 @@ Para una versión nueva, abre otra solicitud con una `version` mayor y lo que ca
 {
   "id": "mi-modulo",
   "version": "1.0.0",
-  "minMadre": "1.0.6",
+  "minMadre": "1.1.0",
   "shelf": "create",
   "price": 0,
   "name": { "es": "Mi módulo", "en": "My module" },
