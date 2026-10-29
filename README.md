@@ -17,7 +17,7 @@ themselves; that is why nothing is published without a person reading it.
    changes*; GitHub makes the fork and the pull request for you, no terminal. By hand:
    - fork this repository;
    - add `modulos/<id>/<id>.module.mjs` and `modulos/<id>/entrada.json`;
-   - check it with `npx madre check-module --file modulos/<id>/<id>.module.mjs --entry modulos/<id>/entrada.json`;
+   - check it with `npx @jossuealcala/madre check-module --file modulos/<id>/<id>.module.mjs --entry modulos/<id>/entrada.json`;
    - open the pull request.
 3. **The automatic check** loads your module, checks the entry and writes what it declares and what
    its code uses in the job's summary.

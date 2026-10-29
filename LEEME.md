@@ -17,7 +17,7 @@ eso nada se publica sin que una persona lo lea.
    *Propose changes*; GitHub hace el fork y el pull request por ti, sin terminal. A mano:
    - haz un fork de este repo;
    - agrega `modulos/<id>/<id>.module.mjs` y `modulos/<id>/entrada.json`;
-   - revisa con `npx madre check-module --file modulos/<id>/<id>.module.mjs --entry modulos/<id>/entrada.json`;
+   - revisa con `npx @jossuealcala/madre check-module --file modulos/<id>/<id>.module.mjs --entry modulos/<id>/entrada.json`;
    - abre el pull request.
 3. **La revisión automática** carga tu módulo, revisa la entrada y deja en el resumen del job lo que
    declara y lo que usa su código.

@@ -32,7 +32,7 @@ jobs:
               continue
             fi
             # La revisión vive en MADRE (src/market-check.mjs), la misma que corre al enviar un módulo.
-            npx --yes madre@latest check-module --file "$file" --entry "$entry" >> "$GITHUB_STEP_SUMMARY" || status=1
+            npx --yes @jossuealcala/madre@latest check-module --file "$file" --entry "$entry" >> "$GITHUB_STEP_SUMMARY" || status=1
             echo "" >> "$GITHUB_STEP_SUMMARY"
           done < cambiados.txt
           exit $status
