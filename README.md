@@ -12,8 +12,9 @@ themselves; that is why nothing is published without a person reading it.
 
 1. **Build it and try it** in your MADRE: with «Create your module» or by hand (`docs/SDK.md` in
    MADRE's repository).
-2. **Send it.** In your module's card, «Send to the Market» checks it and opens the pull request for
-   you if you have `gh` signed in. By hand:
+2. **Send it.** In your module's card, «Send to the Market» checks it, leaves the two files in a
+   folder and opens GitHub's page to upload them to `modulos/<id>/`: drag both in and press *Propose
+   changes*; GitHub makes the fork and the pull request for you, no terminal. By hand:
    - fork this repository;
    - add `modulos/<id>/<id>.module.mjs` and `modulos/<id>/entrada.json`;
    - check it with `npx madre check-module --file modulos/<id>/<id>.module.mjs --entry modulos/<id>/entrada.json`;

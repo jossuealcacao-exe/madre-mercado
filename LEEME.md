@@ -12,8 +12,9 @@ eso nada se publica sin que una persona lo lea.
 
 1. **Hazlo y pruébalo** en tu MADRE: con «Crea tu módulo» o a mano (`docs/SDK.md` en el repo de
    MADRE).
-2. **Mándalo.** En la ficha de tu módulo, «Enviar al Mercado» lo revisa y abre el pull request por ti
-   si tienes `gh` con sesión. A mano:
+2. **Mándalo.** En la ficha de tu módulo, «Enviar al Mercado» lo revisa, deja los dos archivos en una
+   carpeta y abre la página de GitHub para subirlos a `modulos/<id>/`: arrastras los dos y pulsas
+   *Propose changes*; GitHub hace el fork y el pull request por ti, sin terminal. A mano:
    - haz un fork de este repo;
    - agrega `modulos/<id>/<id>.module.mjs` y `modulos/<id>/entrada.json`;
    - revisa con `npx madre check-module --file modulos/<id>/<id>.module.mjs --entry modulos/<id>/entrada.json`;
@@ -51,6 +52,6 @@ Para una versión nueva, abre otro pull request con `version` mayor y `changes`.
 - `spdx`: la licencia de tu código. Hoy: AGPL-3.0, GPL-3.0, MIT, Apache-2.0, BSD-2/3-Clause, ISC o
   MPL-2.0.
 - `icon` (opcional): las figuras de un dibujo de 20×20 con `currentColor`, sin scripts ni enlaces.
-  Si no lo pones, el Mercado usa el ícono de tu módulo.
+  Si no lo pones, el Mercado muestra una pieza de rompecabezas.
 
 Al mandar un módulo aceptas `TERMINOS.md`.
