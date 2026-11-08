@@ -1,0 +1,50 @@
+# Revisa cada habilidad que llega en un pull request: la lee como MADRE la lee antes de cargarla,
+# revisa su cabecera, escribe en el resumen del job lo que le dice a los agentes —entero, porque
+# leerlo ES la revisión— y lo que alcanza cada programa que lleve.
+# Corre con permisos de solo lectura y sin secretos. Una habilidad es texto: nada de ella se
+# ejecuta para leerla. Firmar y publicar lo hace después, a mano, el autor de MADRE.
+name: Revisar habilidad
+on:
+  pull_request:
+    paths: ['habilidades/**']
+permissions:
+  contents: read
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Revisar las habilidades que cambian
+        run: |
+          git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- habilidades/ | cut -d/ -f2 | sort -u | grep -v '^\.' > cambiadas.txt || true
+          status=0
+          while read -r id; do
+            [ -z "$id" ] && continue
+            dir="habilidades/$id"
+            if [ ! -f "$dir/HABILIDAD.md" ] && [ ! -f "$dir/SKILL.md" ]; then
+              echo "## ❌ $id: hace falta $dir/HABILIDAD.md" >> "$GITHUB_STEP_SUMMARY"
+              status=1
+              continue
+            fi
+            # La revisión vive en MADRE (src/skill-check.mjs), la misma que corre en la computadora
+            # de quien la manda y antes de firmarla.
+            salida=$(npx --yes @jossuealcala/madre@latest check-skill --folder "$dir" --lang es 2>&1) && paso=0 || paso=1
+            # Las habilidades llegan en una versión de MADRE posterior a la publicada cuando se
+            # escribió esto: mientras no estén en npm, el comando no existe y hay que decirlo así,
+            # no dejar un «Unknown command» en el resumen de un pull request de alguien.
+            if printf '%s' "$salida" | grep -q 'Unknown command'; then
+              echo "## ⏳ $id" >> "$GITHUB_STEP_SUMMARY"
+              echo "La MADRE publicada en npm todavía no sabe de habilidades, así que no se puede revisar aquí. Llegan en una versión próxima; hasta entonces la revisa el autor a mano." >> "$GITHUB_STEP_SUMMARY"
+              status=1
+            else
+              printf '%s\n' "$salida" >> "$GITHUB_STEP_SUMMARY"
+              [ "$paso" = 0 ] || status=1
+            fi
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          done < cambiadas.txt
+          exit $status
